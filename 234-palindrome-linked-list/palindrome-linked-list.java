@@ -1,23 +1,30 @@
 class Solution {
     public boolean isPalindrome(ListNode head) {
-        List<Integer> arr = new ArrayList<>();
+        if (head == null || head.next == null) return true;
 
-        while (head != null) {
-            arr.add(head.val);
+        //  middle
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // reverse second half
+        ListNode prev = null;
+        while (slow != null) {
+            ListNode next = slow.next;
+            slow.next = prev;
+            prev = slow;
+            slow = next;
+        }
+
+        // Compare halves
+        while (prev != null) {
+            if (head.val != prev.val) return false;
             head = head.next;
+            prev = prev.next;
         }
 
-        int left = 0;
-        int right = arr.size() - 1;
-
-        while (left < right) {
-            if (!arr.get(left).equals(arr.get(right))) {
-                return false;
-            }
-            left++;
-            right--;
-        }
-
-        return true;        
+        return true;
     }
 }
